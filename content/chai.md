@@ -11,6 +11,10 @@ I want to drink a lot of chai.
 But restaurant chai is expensive! 
 I have been obsessing over this recipe and I think it's finally good though to share. 
 
+While this chai is good, it's only around half as good as the stuff you can get at Heritage Indian Cuisine in Duncan, BC, Canada. 
+I'm not sure how they manage to pack so much flavour into one cup of liquid. 
+I'd highly recommend visiting there and ordering some food, everything they have is delicious. 
+
 **Ingredients:**
 - 2c water
 - 1c milk

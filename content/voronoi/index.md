@@ -2,10 +2,7 @@
 title = "Voronoi Noise"
 date = 2025-01-31
 
-description = "test description"
-
-[extra]
-show_only_description = true
+description = "Experiments in generating Voronoi noise with SIMD instructions."
 
 [taxonomies]
 tags=["hobby", "resume"]
