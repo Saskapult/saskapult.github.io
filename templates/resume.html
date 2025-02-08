@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+{%- block title -%}
+{{ title_macros::title(page_title="Resume", main_title=config.title) }}
+{%- endblock -%}
+
+<!-- 
+This would be so much better as a shortcode, but it seems that get_taxonomy_term isn't available from within shortcodes :(
+-->
+
+{% block content %}
+    <div class="post">
+		{{ post_macros::header(page=page) }}
+
+		{{ page.content | safe }}
+
+        <ul>
+			{% set term = get_taxonomy_term(kind="tags", term="resume") %}
+            {% for page in term.pages %}
+            <li class="tag-list">
+                <a href="{{ page.permalink | safe }}">{{ page.title }}</a> 
+				- 
+				{{ page.description | safe }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}

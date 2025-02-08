@@ -8,8 +8,7 @@ path = "about"
 
 Hi! 
 
-If you're looking at this, then you probably looked at my resume too. 
-This site describes much of my resume's content in greater detail, but it also contains other (less important) things. 
+This is where I put things that I want to share publicly. 
+It began as a way to elaborate the content of my resume in greater detail, but I decided to put other things here too (like chai and plushies). 
 
-TODO: List resume tagged things here
-
+I'm not sure what I'll do with it in the future. 

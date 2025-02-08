@@ -26,10 +26,11 @@ logo_text = "K Smith"
 enable_post_view_navigation = false
 post_view_navigation_prompt = "Read more"
 menu_items = [
-    {name = "blog", url = "$BASE_URL"},
+    {name = "posts", url = "$BASE_URL"},
 
     {name = "tags", url = "$BASE_URL/tags"},
     {name = "archive", url = "$BASE_URL/archive"},
+    {name = "resume", url = "$BASE_URL/resume"},
     {name = "about me", url = "$BASE_URL/about"},
     
     {name = "github", url = "https://github.com/Saskapult", newtab = true},
