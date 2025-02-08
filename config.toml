@@ -23,7 +23,6 @@ highlight_theme = "visual-studio-dark"
 accent_color = "green"
 background_color = "auto"
 logo_text = "K Smith"
-enable_post_view_navigation = false
 post_view_navigation_prompt = "Read more"
 menu_items = [
     {name = "posts", url = "$BASE_URL"},
