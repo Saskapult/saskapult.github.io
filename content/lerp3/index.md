@@ -58,7 +58,7 @@ fn lerp3(
 
 It's simple to add this to our terrain generator.
 This works pretty well, but it's rather inefficient. 
-A scaling 8x8x8 volumes to 16x16x16 with this takes 114,564.06ns. 
+Scaling a 8x8x8 volume to 16x16x16 with this takes 114,564.06ns. 
 Just generating a 16x16x16 noise volume takes 113,809.63ns, which is (just barely) faster!
 
 My first order of business was to refactor that `lerp3` code to reduce the number of divisions. 
