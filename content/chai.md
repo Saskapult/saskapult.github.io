@@ -15,6 +15,14 @@ While this chai is good, it's only around half as good as the stuff you can get 
 I'm not sure how they manage to pack so much flavour into one cup of liquid. 
 I'd highly recommend visiting there and ordering some food, everything they have is delicious. 
 
+UPDATE 2025-06-16:
+
+I've done it! 
+I've broken the flavour barrier! 
+How did I do this? 
+I used 3% fat milk! 
+And it made the thing around twice as good! 
+
 **Ingredients:**
 - 2c water
 - 1c milk
