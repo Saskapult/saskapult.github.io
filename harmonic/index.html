@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://saskapult.github.io/style.css">
+    <link rel="stylesheet" href="https://saskapult.github.io/color/green.css">
+
+        <link rel="stylesheet" href="https://saskapult.github.io/color/background_auto.css">
+    
+    <link rel="stylesheet" href="https://saskapult.github.io/font-hack-subset.css">
+
+    <meta name="description" content="An implementation of Harmonic Coordinates for Character Articulation, and elaboration on the mock paper I wrote for it.">
+
+    <meta property="og:description" content="An implementation of Harmonic Coordinates for Character Articulation, and elaboration on the mock paper I wrote for it.">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saskapult.github.io/harmonic/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="An implementation of Harmonic Coordinates for Character Articulation, and elaboration on the mock paper I wrote for it.">
+    <meta name="twitter:title" content="">
+    <meta property="twitter:domain" content="saskapult.github.io">
+    <meta property="twitter:url" content="https://saskapult.github.io/harmonic/">
+
+        <link rel="shortcut icon" type="image/png" href="/wei.png">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://saskapult.github.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            K Smith
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://saskapult.github.io">posts</a></li>
+            
+                <li><a href="https://saskapult.github.io/archive">archive</a></li>
+            
+                <li><a href="https://saskapult.github.io/tags">tags</a></li>
+            
+                <li><a href="https://saskapult.github.io/resume">resume</a></li>
+            
+                <li><a href="https://saskapult.github.io/about">about me</a></li>
+            
+                <li><a href="https://github.com/Saskapult" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://saskapult.github.io/harmonic/">Harmonic Coordinates</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2024-04-18
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://saskapult.github.io/tags/class/">#class</a>&nbsp;
+                <a class="post-tag" href="https://saskapult.github.io/tags/resume/">#resume</a></span>
+    
+
+        <div class="post-content">
+            
+  
+  
+    
+    
+  
+  <img src="https://saskapult.github.io/harmonic/ratwave-ezgif-optimize-larger.gif" alt="a rat deformed to follow a sine wave" class="center" style="border-radius: 8px;width: 35%;float:right;" decoding="async" loading="lazy"/>
+
+<p>An <a href="https://saskapult.github.io/harmonic/(https://github.com/Saskapult/harmonic_coordinates)">implementation</a> of <a href="https://graphics.pixar.com/library/HarmonicCoordinatesB/paper.pdf">Harmonic Coordinates for Character Articulation</a>.
+I wrote a <a href="/hc_paper.pdf">mock paper</a> about it.</p>
+<p>I first implemented a 2D version of this algorithm in CSC 486B (Geometric Modeling) with Teseo Schneider.
+This was accomplished in python using numpy and meshplot.</p>
+<p>When I needed a final project for CSC 473 (Fundamentals of Computer Animation) with Brandon Haworth, I decided to implement the algorithm in 3D.
+This implementation is written in rust, using <a href="https://crates.io/crates/eframe">eframe</a> for windowing/ui and <a href="https://crates.io/crates/wgpu">wgpu</a> for rendering.</p>
+<!-- performance -->
+<p>One thing I enjoyed while working on this project was optimizing the code.
+The most computationally-intensive step involves smoothing values over a grid.
+I chose it implement this using one thread, a thread for each CPU core, and a thread for each cell on the GPU.
+In the paper, the single-threaded algorithm is the most performant.
+This is followed by the multi-threaded and GPU algorithms.</p>
+
+  
+  
+    
+    
+  
+  <img src="https://saskapult.github.io/harmonic/hc_bench.png" alt="a bar graph of computation time" class="center" style="border-radius: 8px;width: 50%;float:right;" decoding="async" loading="lazy"/>
+
+<p>Almost immediately after turning in the paper, however, I found a stupidly simple optimization for my CPU-parallel algorithm.
+The multi-threaded algorithm is now the most performant by far!</p>
+
+        </div>
+
+        
+            <div class="pagination">
+                <div class="pagination__title">
+                    <span class="pagination__title-h">Read more</span>
+                    <hr />
+                </div>
+                <div class="pagination__buttons">
+                        <span class="button previous">
+                            <a href="https://saskapult.github.io/globaljam2024/">
+                                <span class="button__icon">←</span>&nbsp;
+                                <span class="button__text">Run Run Pagliacci</span>
+                            </a>
+                        </span>
+                    
+                    
+                        <span class="button next">
+                            <a href="https://saskapult.github.io/voronoi/">
+                                <span class="button__text">Voronoi Noise</span>&nbsp;
+                                <span class="button__icon">→</span>
+                            </a>
+                        </span>
+                    </div>
+            </div>
+        
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Powered by <a href="https://www.getzola.org/">Zola</a></span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
