@@ -3,8 +3,8 @@ title = "About Me"
 path = "about" 
 +++
 
-{{ image(src="/you_small_400.png", alt="a pixelated picture of me",
-         position="right", style="border-radius: 8px;float:right;width: 35%;") }}
+{{ image(src="/author_happier.png", alt="a pixelated picture of me",
+         position="right", style="border-radius:8px; float:right; width:35%; image-rendering: pixelated;") }}
 
 Hi! 
 
