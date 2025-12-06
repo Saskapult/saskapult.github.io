@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://saskapult.github.io/style.css">
+    <link rel="stylesheet" href="https://saskapult.github.io/color/green.css">
+
+        <link rel="stylesheet" href="https://saskapult.github.io/color/background_auto.css">
+    
+    <link rel="stylesheet" href="https://saskapult.github.io/font-hack-subset.css">
+
+    <meta name="description" content="Embedding Group Overlap Search">
+
+    <meta property="og:description" content="Embedding Group Overlap Search">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saskapult.github.io/ego-search/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Embedding Group Overlap Search">
+    <meta name="twitter:title" content="">
+    <meta property="twitter:domain" content="saskapult.github.io">
+    <meta property="twitter:url" content="https://saskapult.github.io/ego-search/">
+
+        <link rel="shortcut icon" type="image/png" href="/wei.png">
+    
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://saskapult.github.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            K Smith
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://saskapult.github.io">posts</a></li>
+            
+                <li><a href="https://saskapult.github.io/archive">archive</a></li>
+            
+                <li><a href="https://saskapult.github.io/tags">tags</a></li>
+            
+                <li><a href="https://saskapult.github.io/resume">resume</a></li>
+            
+                <li><a href="https://saskapult.github.io/about">about me</a></li>
+            
+                <li><a href="https://github.com/Saskapult" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://saskapult.github.io/ego-search/">EGO Search</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2025-10-06
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://saskapult.github.io/tags/project/">#project</a></span>
+    
+
+        <div class="post-content">
+            <!-- Context -->
+<p>Retrieval augmented generation (RAG) is the process of retrieving information for use by an LLM.
+During training, an LLM learns semantic relationships between words and retains some encoding of the knowledge contained in its training dataset.
+This knowledge, however, can be out-of-date, incorrect, or hallucinated.
+RAG systems supply a LLM with external information in order to reduce the rate at which these issues occur.</p>
+<p>I've been working with retrieval augmented generation as part of my job.
+We're generating a knowledge base by feeding an LLM a bunch of pieces of text and then use that knowledge base to answer queries.
+It uses fancy techniques and I should not talk about it too much here.
+Anyway, it uses an LLM for a lot of that.
+Having a ten-year-old laptop, it's not something that I'm in a position to run locally.
+And even if I could, that's still an entire LLM we're talking about.
+I do not want to pay for the electricity to run that!</p>
+<!-- Explain vector RAG -->
+<p>Sometimes all we want to do is search through a text and locate semantically relevant information.
+A common and efficient method for doing this is to use vector RAG.
+An encoder model can translate the semantic meaning of a text into a vector known as an embedding.
+This is the "encoder" part of an LLM and in GPT-style models it is significantly smaller than the "decoder" part.
+Semantically similar texts create embeddings that are close together in this vector space, clustering relevant information together.
+These embeddings can be stored in a vector database, which is then queried with the embedding of a query text in order to find the most relevant results.
+Standard vector RAG is commonly achieved in this way by splitting a document into chunks of text, storing them in a vector database using their embeddings, and then selecting relevant chunks close to the embedding of a query.</p>
+<!-- The similarity of different vecots is 
+We can use cosine similarity to measure this! 
+
+$a \cdot b = |a| |b| \cos(\theta)$
+
+What we want here is the $\theta$ value because that will tell us the angle between our two vectors. 
+If it's low then they're probably similar, and if it's high they're probably unrelated. 
+An embedding for "cats like catnip" would (hopefully) be similar to "what do cats like" and thus we can use this technique to retrieve relevant information for a query.  -->
+<!-- Impetus -->
+<p>This works pretty well!
+It does retrieve a lot of information, though, and isn't as useful to a human as it is to an LLM.
+LLMs also operate under a contained context window (basically how much information we can supply it with) because too much context becomes computationally nightmarish.
+So I want to make this much more fine-grained...</p>
+<!-- The point! -->
+<p>Two questions arise:</p>
+<ul>
+<li>What if we make the segments really really small?</li>
+<li>How do I handle if something is split across the boundaries of these segments?</li>
+</ul>
+<p>This is the part of the article where I introduce <a href="https://github.com/Saskapult/iiqe">Embedding Group Overlap (EGO) Search</a>!
+Embedding Group Overlap breaks a document into segments composed of sentences or words.
+These segments are far smaller than the chunks typically used in existing vector RAG systems, but are formed into overlapping groups for which embedding vectors are generated.
+These embedding vectors are compared with that of an input query to determine the relevance score for each group.
+Each segment is assigned a relevance score that is the sum of the relevance scores of the groups in which it appears.
+Because each segment appears in multiple groups, a segment receives a higher score if it appears in a greater number of relevant groups.</p>
+<!-- Example -->
+<p>Let's have an example!
+You have the collection of sentences "now for something completely different," "things I like to bake," "cake is one thing," and "oh also cats are nice."
+We generate some groups from these segments.
+In this minimal example those are "now for something completely different things I like to bake," "things I like to bake cake is one thing" and "cake is one thing oh also cats are nice."
+We generate embeddings for those and an embedding for a query text like "do I like to bake cake?"
+Groups 1 and 2 score most highly in this, so segment 2 receives a very high score because it appears in both of those groups.</p>
+
+  <figure class="center" >
+    <img src="/ego-search/sentence_level.png" style="width: 100%;" decoding="async" loading="lazy"/>
+    
+      <figcaption class="center" style="font-style: italic;"><p>A similarity graph for some sentences in some text.</p>
+</figcaption>
+    
+  </figure>
+
+<p>Once we've scored the segments, we identify peaks in the score values.
+We then descend the peak to some cutoff value (in the graph example the 65th percentile) to identify "regions" of text similar to the query text.
+The algorithm outputs a list of these regions sorted by their peak score (though one could use other metrics, I just haven't tried that yet).</p>
+<p>A neat property of this is that a "segment" can be smaller than a sentence!
+For my demo I ran EGO Search with sentence-level segments and then ran it again at a word level on the resulting region.
+It works pretty well!
+It's also, like, the main innovation of this work, so I'd sure hope that it works pretty well.</p>
+
+  <figure class="center" >
+    <img src="/ego-search/word_level.png" style="width: 100%;" decoding="async" loading="lazy"/>
+    
+      <figcaption class="center" style="font-style: italic;"><p>A similarity graph for some words in some text.</p>
+</figcaption>
+    
+  </figure>
+
+<!-- Efficiency -->
+<p>So is it efficient?
+Hahaha... <a href="https://saskapult.github.io/ego-search/no.jpg">no</a>.
+But kind of <a href="https://saskapult.github.io/ego-search/jk_unless.png">maybe yes actually</a>?
+There is a lot of redundant computation in the "overlap" part of the EGO Search.
+The computation of embedding vectors for a document isn't too bad though, and needs only to be performed once.
+After that there's the cost the many similarity comparisons but maybe that's a price worth paying?
+EGO Search is a smart-ish kind of search, and might be the optimal solution if simple searches don't cut it.</p>
+<!-- Conclusion -->
+<p>EGO Search uses text embeddings to retrieve information at a scalable resolution.
+It's able to retrieve semantically-relevant parts of a text and their surrounding context without the computational price of a full LLM.
+I think it's pretty neat :).
+The technique of overlapping embeddings and groups could be applicable in other areas beyond searching, too!
+In the future I'd like to try using it to create semantic sections of text, something like a semantic sorting algorithm.</p>
+<p>I've made a poster for it and I'll be presenting it at the ACM Celebration of Cascadia Women in Computing 2025 Student Poster session.</p>
+
+  <figure class="center" >
+    <img src="/ego-search/poster.png" style="width: 100%;" decoding="async" loading="lazy"/>
+    
+      <figcaption class="center" style="font-style: italic;"><p>My poster!</p>
+</figcaption>
+    
+  </figure>
+
+<p>(yes I did consider using the "G" in EGO Search for "Godzilla" instead of "Group" and while that would have been cooler it would've made less sense)</p>
+<p>Update:
+The poster session had awesome presenters and tasty snacks!
+I ate way too much cheese.</p>
+
+  <figure class="center" >
+    <img src="/ego-search/author_scared.jpg" style="width: 100%;" decoding="async" loading="lazy"/>
+    
+      <figcaption class="center" style="font-style: italic;"><p>There are two wolves inside of you. One has incredible anxiety and the other is very hungry for free food. Both of them have a great poster to show off!</p>
+</figcaption>
+    
+  </figure>
+
+
+        </div>
+
+        
+            <div class="pagination">
+                <div class="pagination__title">
+                    <span class="pagination__title-h">Read more</span>
+                    <hr />
+                </div>
+                <div class="pagination__buttons">
+                        <span class="button previous">
+                            <a href="https://saskapult.github.io/lerp3/">
+                                <span class="button__icon">←</span>&nbsp;
+                                <span class="button__text">3D Noise Scaling</span>
+                            </a>
+                        </span>
+                    
+                    </div>
+            </div>
+        
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Powered by <a href="https://www.getzola.org/">Zola</a></span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
