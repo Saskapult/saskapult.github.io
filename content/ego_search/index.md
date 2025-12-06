@@ -9,36 +9,54 @@ tags=["project"]
 +++
 
 <!-- Context -->
-I've been working with retrieval augmented generation (RAG) as part of my job. 
-While I can't go too much into detail, we're generating a knowledge base by feeding an LLM a bunch of pieces of text and then use that knowledge base to answer queries. 
-Except in a fancy way that I should not talk about here. 
+Retrieval augmented generation (RAG) is the process of retrieving information for use by an LLM. 
+During training, an LLM learns semantic relationships between words and retains some encoding of the knowledge contained in its training dataset. 
+This knowledge, however, can be out-of-date, incorrect, or hallucinated. 
+RAG systems supply a LLM with external information in order to reduce the rate at which these issues occur. 
+
+I've been working with retrieval augmented generation as part of my job. 
+We're generating a knowledge base by feeding an LLM a bunch of pieces of text and then use that knowledge base to answer queries. 
+It uses fancy techniques and I should not talk about it too much here. 
 Anyway, it uses an LLM for a lot of that. 
 Having a ten-year-old laptop, it's not something that I'm in a position to run locally. 
 And even if I could, that's still an entire LLM we're talking about. 
 I do not want to pay for the electricity to run that! 
 
 <!-- Explain vector RAG -->
-A few applications of what we're doing amount to little more than a search through a text, albeit a smart search through a text. 
-One method for doing that is with the use of vector RAG. 
-This utilizes a part of an LLM known as an embedding model. 
+Sometimes all we want to do is search through a text and locate semantically relevant information. 
+A common and efficient method for doing this is to use vector RAG. 
+An encoder model can translate the semantic meaning of a text into a vector known as an embedding. 
 This is the "encoder" part of an LLM and in GPT-style models it is significantly smaller than the "decoder" part. 
-The embedding model transforms text into a vector, a collection of numbers in some ridiculously high-dimensional space. 
-Semantically similar texts generate vectors that are "close" to one another. 
+Semantically similar texts create embeddings that are close together in this vector space, clustering relevant information together. 
+These embeddings can be stored in a vector database, which is then queried with the embedding of a query text in order to find the most relevant results. 
+Standard vector RAG is commonly achieved in this way by splitting a document into chunks of text, storing them in a vector database using their embeddings, and then selecting relevant chunks close to the embedding of a query. 
+
+<!-- The similarity of different vecots is 
 We can use cosine similarity to measure this! 
 
 $a \cdot b = |a| |b| \cos(\theta)$
 
 What we want here is the $\theta$ value because that will tell us the angle between our two vectors. 
 If it's low then they're probably similar, and if it's high they're probably unrelated. 
-An embedding for "cats like catnip" would (hopefully) be similar to "what do cats like" and thus we can use this technique to retrieve relevant information for a query. 
+An embedding for "cats like catnip" would (hopefully) be similar to "what do cats like" and thus we can use this technique to retrieve relevant information for a query.  -->
+
+<!-- Impetus -->
+This works pretty well! 
+It does retrieve a lot of information, though, and isn't as useful to a human as it is to an LLM. 
+LLMs also operate under a contained context window (basically how much information we can supply it with) because too much context becomes computationally nightmarish. 
+So I want to make this much more fine-grained...
 
 <!-- The point! -->
-This works quite well when text is broken into sufficiently-sized segments, but two questions arise: 
-- What if something is split across the boundaries of these segments? 
+Two questions arise: 
 - What if we make the segments really really small? 
+- How do I handle if something is split across the boundaries of these segments? 
 
 This is the part of the article where I introduce [Embedding Group Overlap (EGO) Search](https://github.com/Saskapult/iiqe)! 
-EGO search breaks a text into segments, constructs groups from those segments, scores those segments using embedding cosine similarity, and then finds the segments with the highest score across their member groups. 
+Embedding Group Overlap breaks a document into segments composed of sentences or words. 
+These segments are far smaller than the chunks typically used in existing vector RAG systems, but are formed into overlapping groups for which embedding vectors are generated. 
+These embedding vectors are compared with that of an input query to determine the relevance score for each group. 
+Each segment is assigned a relevance score that is the sum of the relevance scores of the groups in which it appears. 
+Because each segment appears in multiple groups, a segment receives a higher score if it appears in a greater number of relevant groups. 
 
 <!-- Example -->
 Let's have an example! 
@@ -60,7 +78,7 @@ The algorithm outputs a list of these regions sorted by their peak score (though
 A neat property of this is that a "segment" can be smaller than a sentence! 
 For my demo I ran EGO Search with sentence-level segments and then ran it again at a word level on the resulting region. 
 It works pretty well! 
-It's also, like, the main innovation of this work so I'd sure hope that it works pretty well. 
+It's also, like, the main innovation of this work, so I'd sure hope that it works pretty well. 
 
 {{ figure(src="/ego-search/word_level.png",
           style="width: 100%;",
@@ -69,21 +87,21 @@ It's also, like, the main innovation of this work so I'd sure hope that it works
 
 <!-- Efficiency -->
 So is it efficient? 
-Hahaha... [no](https://i.kym-cdn.com/photos/images/newsfeed/000/549/301/119.jpg).
+Hahaha... [no](no.jpg).
+But kind of [maybe yes actually](jk_unless.png)? 
 There is a lot of redundant computation in the "overlap" part of the EGO Search. 
-Indexing a document takes a lot of processing power! 
-That only needs to be done once, but we're still relying on cosine similarity for each query. 
-I'm sure that you can find a more efficient way to search through a document! 
+The computation of embedding vectors for a document isn't too bad though, and needs only to be performed once. 
+After that there's the cost the many similarity comparisons but maybe that's a price worth paying? 
+EGO Search is a smart-ish kind of search, and might be the optimal solution if simple searches don't cut it.
 
 <!-- Conclusion -->
 EGO Search uses text embeddings to retrieve information at a scalable resolution. 
 It's able to retrieve semantically-relevant parts of a text and their surrounding context without the computational price of a full LLM. 
-Is it particularly well-suited to that task? 
-Probably not! 
-But I think it's pretty neat :). 
-I've made a poster for it and I'll be presenting it at the ACM Celebration of Cascadia Women in Computing 2025 Student Poster session. 
+I think it's pretty neat :). 
+The technique of overlapping embeddings and groups could be applicable in other areas beyond searching, too!
+In the future I'd like to try using it to create semantic sections of text, something like a semantic sorting algorithm. 
 
-(well if they let me in, we don't know for sure yet.)
+I've made a poster for it and I'll be presenting it at the ACM Celebration of Cascadia Women in Computing 2025 Student Poster session. 
 
 {{ figure(src="/ego-search/poster.png",
           style="width: 100%;",
@@ -91,3 +109,12 @@ I've made a poster for it and I'll be presenting it at the ACM Celebration of Ca
           caption_style="font-style: italic;") }}
 
 (yes I did consider using the "G" in EGO Search for "Godzilla" instead of "Group" and while that would have been cooler it would've made less sense)
+
+Update: 
+The poster session had awesome presenters and tasty snacks! 
+I ate way too much cheese. 
+
+{{ figure(src="/ego-search/author_scared.jpg",
+          style="width: 100%;",
+          caption="There are two wolves inside of you. One has incredible anxiety and the other is very hungry for free food. Both of them have a great poster to show off!",
+          caption_style="font-style: italic;") }}
