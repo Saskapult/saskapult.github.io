@@ -1,0 +1,12 @@
+---
+import { render } from "astro:content";
+import MarkdownPostInfo from "./MarkdownPostInfo.astro";
+import MarkdownPostTitle from "./MarkdownPostTitle.astro";
+
+const { data } = Astro.props;
+const { Content } = await render(data);
+---
+
+<MarkdownPostTitle title={data.data.title} url=`/blog/${data.id}` />
+<MarkdownPostInfo pubDate={data.data.pubDate}, tags={data.data.tags} />
+<Content />

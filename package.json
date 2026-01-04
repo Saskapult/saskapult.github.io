@@ -1,0 +1,16 @@
+{
+  "name": "fuckout",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.12",
+    "@lucide/astro": "^0.561.0",
+    "astro": "^5.16.4"
+  }
+}

@@ -1,0 +1,57 @@
+---
+const { title, pubDate, tags, url, vertical } = Astro.props;
+---
+
+
+<span class="post-date">{pubDate.toISOString().slice(0,10)}</span> 
+<!-- {vertical ? <span>- </span> : <span>:: </span>} -->
+:: 
+{vertical ? <div><a href={url}>{title}</a></div> : <a href={url}>{title}</a>}
+
+<!-- { 
+	pubDate ? 
+	<span>
+	<span class="post-date">{pubDate.toISOString().slice(0,10)}</span> :: <a href={url}>{title}</a> 
+	</span>
+	: 
+	<> 
+} -->
+ 
+
+{
+	tags &&
+	<span class="post-tags">
+	:: {tags.map((tag: string) => <span><a href={`/tags/${tag}`}>#{tag}</a> </span>)}
+	</span>
+}
+
+
+
+<style>
+	h1, h2, h3, h4, h5, h6 {
+		display: flex;
+		align-items: center;
+		font-weight: bold;
+		line-height: 1.3;
+	}
+	.post-title {
+		--border: 2px dashed var(--accent);
+		position: relative;
+		color: rgb(120,226,160);
+		margin: 0 0 15px;
+		padding-bottom: 15px;
+		border-bottom: var(--border);
+		font-weight: normal;
+	}
+	a {
+		color: var(--text-colour);
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+	a:visited {
+		color: var(--text-colour);
+	}
+	a:link {
+		color: var(--text-colour);
+	}
+</style>

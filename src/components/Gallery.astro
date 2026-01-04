@@ -1,0 +1,71 @@
+---
+import { Image } from "astro:assets";
+
+const { 
+	images_alts=[], 
+	images_style="",
+	columns=2,
+	description,
+} = Astro.props;
+
+const columns_spec = `${100 / columns}%`.repeat(columns)
+---
+
+<div class="gallery">
+  <div class="gallery-grid">
+    {
+      images_alts.map(([image, alt]) => (
+		<span class="gallery-grid-item">
+			<Image
+			src={image}
+			alt={alt}
+			style={"width: 100%; height: auto;" + images_style}
+			loading="eager"
+			/>
+		</span>
+      ))
+    }
+  </div>
+  
+  {description && 
+  <div class="gallery-desc">
+	<span>{description}</span>
+  </div>
+  }
+  {Astro.slots.has("default") &&
+   <div class="gallery-desc">
+	<slot />
+  </div>
+}
+  
+</div>
+
+<style define:vars={{ ggc: `${columns_spec}` }}>
+	.gallery {
+		max-width: 85%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.gallery-grid {
+		max-width: auto;
+		margin-left: auto;
+		margin-right: auto;
+
+		display: inline-grid;
+		grid-template-columns: var(--ggc);
+		margin: 2px;
+	}
+	.gallery-grid-item {
+		justify-content: center;
+		align-items: center;
+		margin: 2px;
+	}
+	.gallery-desc {
+		justify-content: center;
+		text-align: center;
+		padding: .5em 1em;
+		background: var(--accent);
+		color: var(--background);
+		margin: 2px;
+	}
+</style>

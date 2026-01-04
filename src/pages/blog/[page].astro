@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/Header.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths({ paginate }) {
+  const allPosts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+  return paginate(allPosts, { pageSize: 2 });
+}
+// All paginated data is passed on the "page" prop
+const { page } = Astro.props;
+import MarkdownPost from '../../components/MarkdownPost.astro';
+
+---
+<BaseLayout pageTitle="Katherine's Blog">
+  <Header />
+  {
+  page.data.map(async (d) => {
+    return <MarkdownPost data={d} />
+  })
+  }
+  
+  <div class="page-footer-indicator">
+    <h1>Page {page.currentPage} of {page.lastPage}</h1>
+  </div>
+  <div class="pages-footer-items">
+    <div class="page-footer-item">
+      {page.url.prev ? <a href={page.url.prev}>← Newer posts</a> : <span>← Newer posts</span>}
+    </div>
+    <div class="page-footer-item">
+      {page.url.next ? <a href={page.url.next}>Older posts →</a> : <span>Older posts →</span>}
+    </div>
+  </div>
+  
+</BaseLayout>
+
+<style>
+  .page-footer-indicator {
+    display: flex; 
+    justify-content: center;
+  }
+  .pages-footer-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page-footer-item {
+    padding: 10px;
+    padding-top: 0px;
+  }
+
+</style>

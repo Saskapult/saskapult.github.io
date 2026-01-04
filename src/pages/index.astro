@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import Header from '../components/Header.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Maxwell from "/src/assets/maxwell.gif"
+import Estratiol from "/src/assets/estradiol.svg"
+import { getCollection } from 'astro:content';
+import MarkdownPostShort from '../components/MarkdownPostShort.astro';
+import Content from "./index_content.mdx";
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const somePosts = allPosts.slice(0, 5);
+const flatTags = allPosts.map((post: any) => post.data.tags).flat().sort();
+const tagsOccurrences = Object.entries(flatTags.reduce(function (a, v) {
+  return a[v] ? ++a[v] : a[v] = 1, a
+}, {}));
+---
+
+<BaseLayout pageTitle="Katherine Smith Awesome Site">
+	<div class="container">
+		<span class="container-header">
+			<div>
+				<Header />
+			</div>
+		</span>
+		<span class="container-left">
+			<div class="container-inner">
+
+				<h1 style="font-family: 'Alagard', sans-serif">Recent Posts: </h1>
+
+				{somePosts.map((post: any) => <div><MarkdownPostShort url=`/blog/${post.id}` title={post.data.title} pubDate={post.data.pubDate} vertical="true"/></div>)}
+
+				<Image src={Maxwell} alt="Spinning cat pixel art." style="width: 100%; height: auto;" loading="eager" />
+				
+			</div>
+		</span>
+		<span class="container-centre">
+			<div class="container-inner">
+				<Content />
+			</div>
+		</span>
+		<span class="container-right">
+			<div class="container-inner">
+				<h1 style="font-family: 'Alagard', sans-serif">Tags: </h1>
+				{tagsOccurrences.map(([tag, count]) => <div><span class="tag"><a href={`/tags/${tag}`}>#{tag}</a> ({count})</span></div>)}
+
+				<Estratiol fill="white" style="padding-bottom: 200px; flex: 1;" alt="An estradiol molecule."/>
+			</div>
+		</span>
+		<!-- <span class="container-footer">
+			<div class="container-inner">
+				<p>
+				Universal laws suggest that something will break. 
+				It can either be you or an obstacle in your path. 
+				</p>
+
+				<p>
+				Odds are it will be you at some point, but there's also a chance the universe will instead. 
+				</p>
+			</div>
+		</span> -->
+	</div>
+</BaseLayout>
+
+<style>
+	.estrogen {
+		max-width: 25%;
+		/* background-color: pink; */
+		/* border: 10px solid cyan; */
+		/* border-radius: 12px; */
+	}
+	.container {
+		display: grid;
+		grid-template:
+			"headerbar headerbar headerbar"
+			"leftbar mainbar rightbar"
+			"footerbar footerbar footerbar"
+			/ 1fr 3fr 1fr;
+		grid-gap: 10px;
+	}
+	.container-left { grid-area: leftbar; }
+	.container-right { grid-area: rightbar; }
+	.container-header { grid-area: headerbar; }
+	.container-footer { grid-area: footerbar; }
+	.container-centre { grid-area: mainbar; }
+	.container-inner {
+		margin: 4px;
+		padding: 22px;
+		border: 2px solid #d6e9ff;
+		border-radius: 6px;
+		width: 100%;
+		height: 100%;
+		background-color: var(--verybackground);
+	}
+	.tag a {
+		color: var(--text-colour);
+	}
+</style>

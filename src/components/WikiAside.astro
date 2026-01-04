@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+
+const { title, image, desc, alt, style } = Astro.props;
+
+---
+
+<div class="infobox">
+	<div class="centre">
+		<div class="infobox-title">{title}</div>
+		<Image src={image} alt={alt} style=`width: 90%; height: auto; ${style}`/>
+    <div>{desc}</div>
+	</div>
+	<div class="infobox-contents">
+		<slot />
+	</div>
+</div>
+
+<style>
+  .centre {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+  }
+  .infobox {
+    float: right;
+    border: 2px;
+    border-color: grey;
+    background-color: black;
+    border-radius: 4px;
+    margin: 20px;
+    padding: 10px;
+    border-style: solid;
+    width: 25%;
+  }
+  .infobox-title {
+    font-family: "04b25";
+    font-size: x-large;
+  }
+  .infobox-contents {
+    font-family: Alagard;
+  }
+</style>

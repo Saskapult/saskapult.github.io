@@ -1,0 +1,48 @@
+<div id="main-menu" class="nav-links">
+	<a href="/">home</a>
+	<a href="/blog/1">blog</a>
+	<a href="/archive/">archive</a>
+	<a href="/tags/">tags</a>
+	<a href="/about/">about me</a>
+	<a href="https://github.com/Saskapult" target="_blank">github</a>
+</div>
+
+<style>
+	.nav-links {
+		width: 100%;
+		display: none;
+		font-family: "Alagard", sans-serif;
+		margin: 0;
+	}
+
+	.nav-links a {
+		display: block;
+		text-align: center;
+		padding: 10px 0;
+		text-decoration: none;
+		font-size: 1.2rem;
+		font-weight: bold;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+
+	.nav-links a:hover,
+	.nav-links a:focus {
+		color: var(--accent-alpha-70);
+	}
+
+	@media screen and (min-width: 636px) {
+		.nav-links {
+			/* margin-left: 5em; */
+			display: block;
+			position: static;
+			width: auto;
+			background: none;
+		}
+
+		.nav-links a {
+			display: inline-block;
+			padding: 15px 20px;
+		}
+	}
+</style>

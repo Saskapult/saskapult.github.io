@@ -1,0 +1,35 @@
+---
+import FooterInfo from '../components/FooterInfo.astro';
+import '../styles/global.css';
+const { pageTitle } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{pageTitle}</title>
+	</head>
+	<body>
+		<content><slot /></content>
+		<FooterInfo />
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		width: 100%;
+		height: 100%;
+		max-width: 1200px;
+		margin-left: auto;
+  		margin-right: auto;
+		/* background-image: url("stars.jpg"); */
+	}
+	content {
+		/* background-color: var(--verybackground); */
+	}
+</style>

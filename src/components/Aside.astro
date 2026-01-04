@@ -1,0 +1,67 @@
+---
+interface Props {
+	title: string;
+	type: "idea" | "info" | "warning" | "error" | "quote" | "question" | "recipe";
+}
+const { type, title } = Astro.props as Props;
+
+const icon = (() => {
+	switch (type) {
+		case "idea": return "Sprout";
+		case "info": return "Waypoints";
+		case "warning": return "TriangleAlert";
+		case "error": return "Zap";
+		case "quote": return "Quote";
+		case "question": return "CircleQuestionMark"
+		case "recipe": return "FlaskConical"
+		default: return "Zap";
+	}
+})();
+
+import LucideIcon from "./LucideIcon.astro"
+---
+
+
+<div class="aside" data-type={type}>
+	<div class="aside-title">
+		<span class="aside-icon">
+			<LucideIcon name={icon} />
+		</span>
+		<span class="aside-title-inner">{title}</span>
+	</div>
+	<div class="aside-content">
+		<slot />
+	</div>
+</div>
+
+<style>
+  .aside {
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 10px;
+	margin: 1em;
+	border-color: var(--background);
+	/* color: var(--text); */
+	padding: 12px;
+  }
+  
+  .aside-title {}
+  .aside-title-inner {
+	font-size: larger;
+	font-family: "04b25", sans-serif;
+	/* font-weight: bold; */
+  }
+  .aside-icon {
+	color: var(--background);
+  }
+  .aside-content {}
+  .aside {
+	/* Set vars here and then have them used in the above bits */
+	--background: "grey";
+	/* --text: red; */
+  }
+  .aside[data-type="idea"] {
+	--background: yellow;
+	/* --text: red; */
+  }
+</style>

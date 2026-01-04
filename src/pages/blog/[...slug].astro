@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import MarkdownPost from '../../components/MarkdownPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id }, props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<BaseLayout pageTitle=`${post.data.title} - Katherine's Blog`>
+  <Header />
+  <MarkdownPost data={post} />
+  <div class="footerhome">
+	<span>-=- READ MORE AT HOME -=-</span>
+  </div>
+</BaseLayout>
+
+<style>
+  .footerhome {
+    text-align: center;
+  }
+</style>

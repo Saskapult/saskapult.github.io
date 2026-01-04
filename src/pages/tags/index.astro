@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/Header.astro';
+import PostTitle from '../../components/MarkdownPostTitle.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const allPosts = await getCollection('blog');
+const flatTags = allPosts.map((post: any) => post.data.tags).flat().sort();
+const tagsOccurrences = Object.entries(flatTags.reduce(function (a, v) {
+  return a[v] ? ++a[v] : a[v] = 1, a
+}, {}));
+---
+
+<BaseLayout pageTitle="Katherine's Blog - Tags">
+  <Header />
+  <PostTitle title="all tags"/>
+  <ul>
+    {tagsOccurrences.map(([tag, count]) => <li><span class="tag"><a href={`/tags/${tag}`}>{tag} ({count} posts)</a></span></li>)}
+  </ul>
+  </div>
+</BaseLayout>
+<style>
+  a {
+    color: var(--text-colour)
+  }
+
+  .tag {
+    margin: 0.25em;
+    padding: .5em 1em;
+    /* font-size: 1.15em; */
+  }
+</style>

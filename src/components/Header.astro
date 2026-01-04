@@ -1,0 +1,66 @@
+---
+import KatQuote from './KatQuote.astro';
+import Navigation from './Navigation.astro';
+---
+
+<header>
+  <div class="logo">
+	<span style="float: right;"><KatQuote /></span>
+	<h1>Katherine Smith Awesome Site</h1>
+  </div>
+  
+  <nav>
+    <Navigation />
+  </nav>
+</header>
+
+<style>
+	header {
+		background-image: url("/src/stars.jpg");
+	}
+	nav {
+		max-width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.logo {
+		max-width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.logo:after {
+		background: repeating-linear-gradient(90deg, var(--accent), var(--accent) 2px, rgba(0,0,0,0) 0, rgba(0,0,0,0) 16px);
+		display: block;
+		width: 100%;
+		box-sizing: inherit;
+	}
+	.post-date {
+		color: var(--accent-alpha-70)
+	}
+	.post-tags {
+		color: var(--text-colour);
+		opacity: .5;
+		a:link { color: var(--text-colour); }
+		a:visited { color: var(--text-colour); }
+	}
+	.post-title {
+		--border: 2px dashed var(--accent);
+		position: relative;
+		color: rgb(120,226,160);
+		margin: 0 0 15px;
+		padding-bottom: 15px;
+		border-bottom: var(--border);
+		/* border-bottom: rgba(255, 255, 255, .1);  */
+		/* var(--border); */
+		font-weight: normal;
+	}
+	header {
+		margin: 4px;
+		padding: 22px;
+		border: 2px solid #d6e9ff;
+		border-radius: 6px;
+		align-items: center;
+		align-content: center;
+		align-self: center;
+	}
+</style>

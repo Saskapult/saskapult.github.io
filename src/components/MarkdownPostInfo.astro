@@ -1,0 +1,22 @@
+---
+const { pubDate, tags } = Astro.props;
+---
+
+<p>
+<span class="post-date">
+	{pubDate.toISOString().slice(0,10)}
+</span>
+<span class="post-tags">
+	:: tags:
+	{tags.map((tag: string) => (
+	<a href={`/tags/${tag}`}>#{tag}</a>
+	))}
+</span>
+</p>
+
+<style>
+	a {
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+</style>
