@@ -6,7 +6,7 @@ import Navigation from './Navigation.astro';
 <header>
   <div class="logo">
 	<span style="float: right;"><KatQuote /></span>
-	<h1>Katherine Smith Awesome Site</h1>
+	<h1 class="centeme">Katherine Smith Awesome Site</h1>
   </div>
   
   <nav>
@@ -17,6 +17,9 @@ import Navigation from './Navigation.astro';
 <style>
 	header {
 		background-image: url("/src/assets/stars.jpg");
+	}
+	.centeme {
+		text-align: center;
 	}
 	nav {
 		max-width: fit-content;
