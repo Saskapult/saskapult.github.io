@@ -73,12 +73,12 @@ const tagsOccurrences = Object.entries(flatTags.reduce(function (a, v) {
 	}
 	.container {
 		display: grid;
+		grid-gap: 10px;
 		grid-template:
 			"headerbar headerbar headerbar"
 			"leftbar mainbar rightbar"
 			"footerbar footerbar footerbar"
 			/ 1fr 3fr 1fr;
-		grid-gap: 10px;
 	}
 	.container-left { grid-area: leftbar; }
 	.container-right { grid-area: rightbar; }
@@ -96,5 +96,16 @@ const tagsOccurrences = Object.entries(flatTags.reduce(function (a, v) {
 	}
 	.tag a {
 		color: var(--text-colour);
+	}
+
+	@media screen and (max-width: 900px) {
+		.container {
+			grid-template:
+				"headerbar headerbar"
+				"leftbar mainbar"
+				"footerbar footerbar"
+				/ 1fr 2fr;
+		}
+		.container-right { display: none;}
 	}
 </style>
