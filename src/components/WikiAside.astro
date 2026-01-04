@@ -42,4 +42,12 @@ const { title, image, desc, alt, style } = Astro.props;
   .infobox-contents {
     font-family: Alagard;
   }
+
+  /* If the screen is too narrow then don't float it! */
+  @media screen and (max-width: 900px) {
+		.infobox {
+			float: none;
+      width: 85vw
+		}
+	}
 </style>
